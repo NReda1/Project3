@@ -115,7 +115,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project3-1/.circleci/ansible/inventory.txt
+            - /c/nano\ degree/CICD/Project3-1/.circleci/ansible/inventory.txt
              
   
 workflows:
