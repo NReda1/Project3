@@ -120,6 +120,7 @@ jobs:
            command: |
              pwd
              ls
+             cat inventory.txt
              cp inventory.txt .circleci/ansible
 
       - destroy-environment
