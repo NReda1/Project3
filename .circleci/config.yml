@@ -121,7 +121,7 @@ jobs:
              pwd
              ls
              cat inventory.txt
-             cp inventory.txt .circleci/ansible
+             cp inventory.txt .circleci/ansible/
 
       - destroy-environment
 
