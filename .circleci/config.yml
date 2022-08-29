@@ -113,9 +113,15 @@ jobs:
             echo "[web]" > inventory.txt
             aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt
       - persist_to_workspace:
-          root: ~/project/workspace
+          root: .
           paths:
-            - .circleci/ansible/inventory.txt
+            - inventory.txt
+      -  run:
+           command: |
+             pwd
+             ls
+             cp inventory.txt .circleci/ansible
+
       - destroy-environment
 
   configure-infrastructure:
@@ -126,7 +132,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["83:7e:bb:78:07:17:1a:8f:9b:fb:96:6f:d0:18:0b:3e"]
       - attach_workspace:
-          at: /root/project
+          at: .
       - run:
           name: Install dependencies
           command: |
