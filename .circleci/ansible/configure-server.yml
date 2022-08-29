@@ -1,6 +1,6 @@
 ---
 
-- name: "configuration play." 
+- name: "configuration play" 
   hosts: web
   user: ubuntu
   become: true
@@ -33,4 +33,4 @@
     
 
   roles:
-    configure-server
+    - configure-server
