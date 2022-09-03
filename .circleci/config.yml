@@ -5,15 +5,39 @@ version: 2.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+    Workflow_ID:
+      type: string
+      default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
 
-  
+  revert-migrations:
+    description: Revert the last migration, if any were executed during the current workflow
+    parameters:
+      Workflow_ID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+            SUCCESS=$(curl --insecure  https://kvdb.io/4xPgQ1dYCQSjuE4hArUWFX//migration_<< parameters.Workflow_ID >>)
+
+            # Logic for reverting the database state
+            if (( $SUCCESS == 1 ));
+            then
+              cd ~/project/backend
+              npm install
+              npm run migration:revert
+            fi
             
 
 jobs:
@@ -22,28 +46,40 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           command: |
              cd frontend
              npm install
              npm run build
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
 
   build-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           command: |
              cd backend
              npm install
              npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
   
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           command: |
              cd frontend
@@ -54,6 +90,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           command: |
              cd backend
@@ -65,6 +103,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           command: |
              cd frontend
@@ -78,6 +118,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           command: |
              cd backend
@@ -147,6 +189,7 @@ jobs:
             cd .circleci/ansible/
             cat ../../inventory.txt
             ansible-playbook -i ../../inventory.txt configure-server.yml
+      - destroy-environment
 
   run-migrations:
     docker:
@@ -158,11 +201,6 @@ jobs:
            command: |
              cd backend
              npm install
-             npm audit fix --audit-level=critical --force
-             npm audit fix --audit-level=critical --force
-             npm audit fix --audit-level=critical --force
-             npm audit fix --audit-level=critical --force
-             npm run build
              # Run and save the migration output
              npm run migrations > migrations_dump.txt
              no_output_timeout: 30m
@@ -175,6 +213,8 @@ jobs:
              then
                 curl https://kvdb.io/4xPgQ1dYCQSjuE4hArUWFX/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
              fi
+      - destroy-environment
+      - revert-migrations
       
              
   
