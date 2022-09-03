@@ -1,7 +1,8 @@
 - name: "install python."
   become: true
   apt:
-    name: python
+    update_cache: yes
+    name: python3
     state: present
     
 - name: "upgrade packages."
