@@ -2,8 +2,8 @@
   become: true
   apt:
     name: python
-    state: latest
-    update_cache: yes
+    state: present
+    
 - name: "upgrade packages."
   become: true
   apt:
