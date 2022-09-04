@@ -202,8 +202,7 @@ jobs:
              npm install
              npm run build
              # Run and save the migration output
-             npm run migrations 
-             no_output_timeout: 30m
+             npm run migrations
              pwd
              ls -larth
       #- run:
