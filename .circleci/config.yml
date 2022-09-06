@@ -215,7 +215,8 @@ jobs:
       - revert-migrations
 
   deploy-frontend:
-    docker: noura1990/myrepo
+    docker:
+      - image: noura1990/myrepo
       
     steps:
       - checkout
