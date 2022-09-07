@@ -31,8 +31,8 @@ jobs:
             echo $TYPEORM_HOST >> inventory.txt
             pwd
             ls -larth
-            cat ../../inventory.txt
-            ansible-playbook -i ../../inventory.txt deploy-backend.yml
+            
+            ansible-playbook -i inventory.txt deploy-backend.yml
       
 
 
