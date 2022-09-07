@@ -5,8 +5,8 @@ version: 2.1
 
 
   
-
-deploy-backend:
+jobs:
+  deploy-backend:
     docker:
       - image: noura1990/myrepo
     steps:
@@ -28,7 +28,7 @@ deploy-backend:
             cd .circleci/ansible/
             echo "[web]" > inventory.txt
             export TYPEORM_HOST=$(aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text )
-            echo $TYPEORM_HOST >> inventory.txt
+            echo $TYPEORM_HOST z> inventory.txt
             pwd
             ls -larth
             cat ../../inventory.txt
