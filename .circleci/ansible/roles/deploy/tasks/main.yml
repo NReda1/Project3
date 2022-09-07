@@ -5,7 +5,7 @@
 
 
  - copy:
-       src:  /home/circleci/project/.circleci/ansible/roles/deploy/artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz 
+       src:  ~/project/ansible/roles/deploy/artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz 
        dest: /home/ubuntu/backend
 
  - name: "Unarchive backend files"
