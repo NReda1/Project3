@@ -2,11 +2,11 @@ version: 2.1
 
 
 
-commands:
+
 
   
 
-  deploy-backend:
+deploy-backend:
     docker:
       - image: noura1990/myrepo
     steps:
