@@ -40,23 +40,7 @@ jobs:
     steps:
       - checkout
       
-      - run:
-          name: Get backend url
-          command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text )
-            export API_URL="http://${BACKEND_IP}:3030/api/status"
-            echo "API_URL = ${API_URL}"
-           
-
-      - run:
-          name: Backend smoke test.
-          command: |
-           if curl ${API_URL} | grep "ok"
-           then
-               return 0
-           else
-               return 1
-           fi
+      
       - run:
 
           name: Frontend smoke test.
