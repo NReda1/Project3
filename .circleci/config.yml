@@ -23,15 +23,15 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist/* package*
             pwd
             ls
-            cp /home/circleci/project/backend/artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz  .circleci/ansible/roles/deploy/artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz 
-            ls /home/circleci/ansible/roles/deploy/
-            cd .circleci/ansible/
+            cp /home/circleci/project/backend/artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz  ~/project/.circleci/ansible/roles/deploy/artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz 
+            ls ../.circleci/ansible/roles/deploy/
+            cd ../.circleci/ansible/
             echo "[web]" > inventory.txt
             export TYPEORM_HOST=$(aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text )
             echo $TYPEORM_HOST >> inventory.txt
             pwd
             ls -larth
-            cat ../../inventory.txt
+            cat ../../../inventory.txt
             ansible-playbook -i ../../inventory.txt deploy-backend.yml
       
 
