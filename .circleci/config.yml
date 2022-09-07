@@ -23,7 +23,7 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist/* package*
             pwd
             ls
-            cp ../artifact.tar.gz .circleci/ansible/roles/deploy/artifact.tar.gz
+            cp ../backend/artifact.tar.gz .circleci/ansible/roles/deploy/artifact.tar.gz
             ls .circleci/ansible/roles/deploy/
             cd .circleci/ansible/
             echo "[web]" > inventory.txt
