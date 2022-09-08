@@ -12,6 +12,16 @@
    unarchive:
        src: artifact.tar.gz
        dest: /home/ubuntu/backend
+
+ - name: start the app
+   shell: |
+     export TYPEORM_ENTITIES=/home/ubuntu/backend/dist/modules/domain/**/*.entity{.ts,.js}
+     export TYPEORM_HOST=udapeople-db.cvsojczpx9r9.us-east-1.rds.amazonaws.com
+     export TYPEORM_PORT=5432
+     export TYPEORM_USERNAME=postgres
+     export TYPEORM_PASSWORD=eyHEs0Z6yfL8jVJNR8iy
+     export TYPEORM_DATABASE=glee
+
    
 
  - name: "Executing Node app with PM2"
