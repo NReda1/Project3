@@ -305,6 +305,23 @@ jobs:
                echo "Rolling back"
                exit 1
            fi
+      
+
+  cloudfront-update:
+    docker:
+      image: noura1990/myrepo
+    steps:
+      - checkout
+      - run:
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+    
             
     
 
@@ -317,28 +334,29 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-         requires: [build-backend]
+      #- build-frontend
+      #- build-backend
+      #- test-frontend:
+      #    requires: [build-frontend]
+      #- test-backend:
+       #  requires: [build-backend]
       #- scan-frontend:
        #  requires: [build-frontend]
       #- scan-backend:
        #   requires: [build-backend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend]
-      - configure-infrastructure:
-         requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-           requires: [deploy-frontend,deploy-backend]
-          
+      #- deploy-infrastructure:
+        #  requires: [test-frontend, test-backend]
+      #- configure-infrastructure:
+         #requires: [deploy-infrastructure]
+      #- run-migrations:
+          #requires: [configure-infrastructure]
+      #- deploy-frontend:
+          #requires: [run-migrations]
+      #- deploy-backend:
+          #requires: [run-migrations]
+      #- smoke-test:
+           #requires: [deploy-frontend,deploy-backend]
+      - cloudfront-update
+         # requires: [smoke-test]
 
       
