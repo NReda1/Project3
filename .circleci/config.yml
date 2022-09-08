@@ -309,10 +309,10 @@ jobs:
 
   cloudfront-update:
     docker:
-      image: noura1990/myrepo
+      - image: noura1990/myrepo
     steps:
       - checkout
-      - run:
+    
       - run:
           name: Update cloudfront distribution
           command: |
