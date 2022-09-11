@@ -357,8 +357,9 @@ jobs:
           command: |
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
+              aws s3 rm https://s3.console.aws.amazon.com/s3/buckets/udapeople-${OldWorkflowID} 
               aws cloudformation delete-stack --stack-name udapeople-frontend-${OldWorkflowID}
-              aws s3 rm s3://udapeople-${OldWorkflowID} --recursive --request-payer
+              
               aws cloudformation delete-stack --stack-name udapeople-backend-${OldWorkflowID}
               
             
